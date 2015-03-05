@@ -1,78 +1,111 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>fileTypes</key>
-	<array>
-		<string>todo.txt</string>
-		<string>todoDone.txt</string>
-		<string>todoLiveU.txt</string>
-		<string>todoDoneLiveU.txt</string>
-	</array>
-	<key>name</key>
-	<string>Todo.txt</string>
-	<key>patterns</key>
-	<array>
-		<dict>
-			<key>comment</key>
-			<string>Todo item priority (can be set to A-E in the mobile application; should be enough for now)</string>
-			<key>match</key>
-			<string>^\([A-E]\)</string>
-			<key>name</key>
-			<string>constant.language.todotxt.priority</string>
-		</dict>
-		<dict>
-			<key>comment</key>
-			<string>Todo item context</string>
-			<key>match</key>
-			<string>\@\S*</string>
-			<key>name</key>
-			<string>entity.name.tag.todotxt.context</string>
-		</dict>
-		<dict>
-			<key>comment</key>
-			<string>Todo item project</string>
-			<key>match</key>
-			<string>\+\S*</string>
-			<key>name</key>
-			<string>entity.name.tag.todotxt.project</string>
-		</dict>
-		<dict>
-			<key>comment</key>
-			<string>Done Todo item</string>
-			<key>match</key>
-			<string>^x\s.*$</string>
-			<key>name</key>
-			<string>comment.line.todotxt</string>
-		</dict>
-		<dict>
-			<key>comment</key>
-			<string>Todo item done or creation date</string>
-			<key>match</key>
-			<string>([1-2]\d{3}[-/\\.](0?[1-9]|1[012])[-/\\.](0[1-9]|[12]\d|3[01]) ){1,2}</string>
-			<key>name</key>
-			<string>constant.numeric.todotxt.date</string>
-		</dict>
-		<dict>
-			<key>comment</key>
-			<string>Todo item due date</string>
-			<key>match</key>
-			<string>(?i:DUE):([1-2]\d{3}[-/\\.](0?[1-9]|1[012])[-/\\.](0[1-9]|[12]\d|3[01]))</string>
-			<key>name</key>
-			<string>constant.numeric.todotxt.date</string>
-		</dict>
-		<dict>
-			<key>comment</key>
-			<string>Todo WAIT command</string>
-			<key>match</key>
-			<string>[^\S](?i:WAIT)[^\S]</string>
-			<key>name</key>
-			<string>keyword.other.todotxt.wait</string>
-		</dict>
-	</array>
-	<key>scopeName</key>
-	<string>text.todotxt</string>
-	<key>uuid</key>
-	<string>8887f83b-c6dc-4d6c-909a-62bb008f1c8b</string>
-</dict>
+	<dict>
+		<key>name</key>
+		<string>Todo.txt</string>
+		<key>scopeName</key>
+		<string>text.todotxt</string>
+		<key>fileTypes</key>
+		<array>
+			<string>todo.txt</string>
+			<string>todoDone.txt</string>
+			<string>todoLiveU.txt</string>
+			<string>todoDoneLiveU.txt</string>
+			<string>WaitingFor.txt</string>
+		</array>
+		<key>patterns</key>
+		<array>
+			<!-- Completed task -->
+			<dict>
+				<key>name</key>
+				<string>comment.completed.todotxt</string>
+				<key>match</key>
+				<string>^x .*$</string>
+			</dict>
+			<!-- Priority (high) -->
+			<dict>
+				<key>name</key>
+				<string>constant.other.priority.high.todotxt</string>
+				<key>match</key>
+				<string>^\(A\)(?&lt;! )</string>
+			</dict>
+			<!-- Priority (medium) -->
+			<dict>
+				<key>name</key>
+				<string>constant.other.priority.medium.todotxt</string>
+				<key>match</key>
+				<string>^\(B\)(?&lt;! )</string>
+			</dict>
+			<!-- Priority (low) -->
+			<dict>
+				<key>name</key>
+				<string>constant.other.priority.low.todotxt</string>
+				<key>match</key>
+				<string>^\(C\)(?&lt;! )</string>
+			</dict>
+			<!-- Priority (other) -->
+			<dict>
+				<key>name</key>
+				<string>constant.other.priority.other.todotxt</string>
+				<key>match</key>
+				<string>^\([D-Z]\)(?&lt;! )</string>
+			</dict>
+			<!-- Context (@value) -->
+			<dict>
+				<key>captures</key>
+				<dict>
+					<key>2</key>
+					<dict>
+						<key>name</key>
+						<string>punctuation.definition.context.todotxt</string>
+					</dict>
+				</dict>
+				<key>name</key>
+				<string>keyword.context.todotxt</string>
+				<key>match</key>
+				<string>(?&lt;=^|\s)(@)\S*</string>
+			</dict>
+			<!-- Project (+value) -->
+			<dict>
+				<key>captures</key>
+				<dict>
+					<key>2</key>
+					<dict>
+						<key>name</key>
+						<string>punctuation.definition.project.todotxt</string>
+					</dict>
+				</dict>
+				<key>name</key>
+				<string>keyword.other.project.todotxt</string>
+				<key>match</key>
+				<string>(?&lt;=^|\s)(\+)\S+</string>
+			</dict>
+			<!-- Add-on (key:value) -->
+			<dict>
+				<key>captures</key>
+				<dict>
+					<key>1</key>
+					<dict>
+						<key>name</key>
+						<string>variable.addon.todotxt</string>
+					</dict>
+					<key>2</key>
+					<dict>
+						<key>name</key>
+						<string>punctuation.separator.key-value.addon.todotxt</string>
+					</dict>
+					<key>3</key>
+					<dict>
+						<key>name</key>
+						<string>string.addon.todotxt</string>
+					</dict>
+				</dict>
+				<key>name</key>
+				<string>meta.structure.addon.todotxt</string>
+				<key>match</key>
+				<string>(?&lt;=^|\s)(\S+)(:)(\S+)</string>
+			</dict>
+		</array>
+	</dict>
 </plist>
